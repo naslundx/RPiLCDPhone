@@ -20,6 +20,11 @@ lcd_backlight = 4
 lcd_columns   = 16
 lcd_rows      = 2
 
+# GPIO, serial and LCD setup
+GPIO.setmode(GPIO.BOARD)
+port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
+lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
+
 # Read single character without waiting for enter
 def getch():
     fd = sys.stdin.fileno()
@@ -100,28 +105,28 @@ def recv_sms():
     port.write("\x0D\x0A")
     rcv = port.read(10)
     if not 'OK' in rcv:
-        return False
+        return ('', False)
     sleep(1)
     
     # Disable the Echo
     port.write('ATE0'+'\r\n')                 
     rcv = port.read(10)
     if not 'OK' in rcv:
-        return False
+        return ('', False)
     sleep(1)
     
     # Select Message format as Text mode
     port.write('AT+CMGF=1'+'\r\n')             
     rcv = port.read(10)
     if not 'OK' in rcv:
-        return False
+        return ('', False)
     sleep(1)
     
     # New SMS Message Indications
     port.write('AT+CNMI=2,1,0,0,0'+'\r\n')      
     rcv = port.read(10)
     if not 'OK' in rcv:
-        return False
+        return ('', False)
     sleep(1)
     
     while True:
@@ -146,9 +151,10 @@ def recv_sms():
             for j in range(10):
                 rcv = port.read(20)
                 msg=msg+rcv
-            print msg
-            return True
+            return (msg, True)
         sleep(0.1)
+
+    return ('', False)
 
 def update_lcd_until_enter(msg, scroll=False):
     print("upd_lcd")
@@ -187,39 +193,31 @@ def gui_send_sms():
 
 def gui_recv_sms():
     print("recv")
-    recv_sms()
+    (message, status) = recv_sms()
+    if not status:
+        return
+    print(message)
+    # TODO print message to LCD
 
 # --- --- --- --- --- --- --- --- --- --- --- ---
 
-# Init serial port and LCD
-GPIO.setmode(GPIO.BOARD)
-port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
-lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
-lcd.clear()
-lcd.blink(False)
-
-#lcd.clear()
-#lcd.blink(True)
-#sleep(1.0)
-#lcd.message('Starting...')
-#sleep(1.0)
-
 # Main loop
-# def main():
-while (True):
+def main():
+    while (True):
+        lcd.clear()
+        lcd.blink(False)
+        lcd.message('(1) Send SMS\n(2)Recv SMS')
 
-    # TODO print "1) Send SMS\n2) Receive SMS"
+        ch = getch()
+        print(str(ch))
 
-    ch = getch()
-    print(str(ch))
-
-    # Check what to do
-    if ch == '1':
-        gui_send_sms()
-    elif ch == '2':
-        gui_recv_sms()
+        # Check what to do
+        if ch == '1':
+            gui_send_sms()
+        elif ch == '2':
+            gui_recv_sms()
 
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
