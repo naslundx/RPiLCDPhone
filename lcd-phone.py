@@ -5,6 +5,7 @@ import serial
 import RPi.GPIO as GPIO      
 import os
 import Adafruit_CharLCD as LCD
+import subprocess
 from subprocess import *
 from time import sleep, strftime
 from datetime import datetime
@@ -21,6 +22,7 @@ lcd_columns   = 16
 lcd_rows      = 2
 
 # GPIO, serial and LCD setup
+subprocess.call('stopserial.sh')
 #GPIO.setmode(GPIO.BOARD)
 port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
@@ -46,10 +48,11 @@ def find(str, ch):
 
 # Initialize send SMS
 def init_send_sms():
-    print("Initializing Send SMS...")
+    print("init_send_sms")
     # Prepare
     port.write('AT\r\n')
     rcv = port.read(10)
+    print(rcv)
     if not 'OK' in rcv:
         return False
     sleep(1)
@@ -57,6 +60,7 @@ def init_send_sms():
     # Disable the Echo
     port.write('ATE0\r\n')      
     rcv = port.read(10)
+    print(rcv)
     if not 'OK' in rcv:
         return False
     sleep(1)
@@ -64,6 +68,7 @@ def init_send_sms():
     # Select Message format as Text mode 
     port.write('AT+CMGF=1\r\n')  
     rcv = port.read(10)
+    print(rcv)
     if not 'OK' in rcv:
         return False
     sleep(1)
@@ -71,6 +76,7 @@ def init_send_sms():
     # New SMS Message Indications
     port.write('AT+CNMI=2,1,0,0,0\r\n')   
     rcv = port.read(10)
+    print(rcv)
     if not 'OK' in rcv:
         return False
     sleep(1)
@@ -79,9 +85,11 @@ def init_send_sms():
 
 
 def send_sms(number, message):
+    print('send_sms')
     # Pass on recepient number
     port.write('AT+CMGS="%s"\r\n' % number)
     rcv = port.read(10)
+    print(rcv)
     if not 'OK' in rcv:
         return False
     sleep(1)
@@ -89,6 +97,7 @@ def send_sms(number, message):
     # Pass on message
     port.write('%s\r\n' % message)
     rcv = port.read(10)
+    print(rcv)
     print rcv
     
     # Send
@@ -104,6 +113,7 @@ def recv_sms():
     port.write('AT'+'\r\n')
     port.write("\x0D\x0A")
     rcv = port.read(10)
+    print(rcv)
     if not 'OK' in rcv:
         return ('', False)
     sleep(1)
@@ -111,6 +121,7 @@ def recv_sms():
     # Disable the Echo
     port.write('ATE0'+'\r\n')                 
     rcv = port.read(10)
+    print(rcv)
     if not 'OK' in rcv:
         return ('', False)
     sleep(1)
@@ -118,6 +129,7 @@ def recv_sms():
     # Select Message format as Text mode
     port.write('AT+CMGF=1'+'\r\n')             
     rcv = port.read(10)
+    print(rcv)
     if not 'OK' in rcv:
         return ('', False)
     sleep(1)
@@ -125,6 +137,7 @@ def recv_sms():
     # New SMS Message Indications
     port.write('AT+CNMI=2,1,0,0,0'+'\r\n')      
     rcv = port.read(10)
+    print(rcv)
     if not 'OK' in rcv:
         return ('', False)
     sleep(1)
@@ -174,7 +187,11 @@ def update_lcd_until_enter(msg, scroll=False):
         if not scroll:
             lcd.message(ch)
         else:
-            lcd.message('?') # TODO scroll support
+            if len(message) < 16:
+                lcd.message(ch)
+            else
+                lcd.clear()
+                lcd.message(msg.format(result[(len(result)-16):])) 
     lcd.blink(False)
     return (result, False)
 
@@ -183,18 +200,26 @@ def gui_send_sms():
     (number, status) = update_lcd_until_enter("Enter number:\n{0}")
     if not status:
         return
-    (message, status) = update_lcd_until_enter("Enter message:\n{0}")
+    (message, status) = update_lcd_until_enter("Enter message:\n{0}", True)
     if not status:
         return
     lcd.clear()
     sleep(1)
     lcd.message("Preparing...")
-    init_send_sms()
+    status = init_send_sms()
     lcd.clear()
+    if not status:
+        lcd.message("Failed. :(")
+        sleep(2)
+        return
     lcd.message("Sending...")
     sleep(1)
-    send_sms(number, message)
+    status = send_sms(number, message)
     lcd.clear()
+    if not status:
+        lcd.message("Failed. :(")
+        sleep(2)
+        return
     lcd.message("Done.")
     sleep(1)
     return
