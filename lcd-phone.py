@@ -150,13 +150,44 @@ def recv_sms():
             return True
         sleep(0.1)
 
+def update_lcd_until_enter(msg, scroll=False):
+    print("upd_lcd")
+    lcd.blink(True)
+    result = ""
+    lcd.message(msg.format(result))
+    while (True):
+        ch = getch()
+        print(str(ch))
+        if ch == '\r':
+            lcd.blink(False)
+            return (result, True)
+        elif ch == 27:
+            break
+        result = result + ch
+        lcd.message(msg.format(result)) # TODO scroll support
+    lcd.blink(False)
+    return (result, False)
 
 def gui_send_sms():
-
-
+    print("send")
+    (number, status) = update_lcd_until_enter("Enter number:\n{0}")
+    if not status:
+        return
+    (message, status) = update_lcd_until_enter("Enter message:\n{0}")
+    if not status:
+        return
+    lcd.clear()
+    lcd.message("Preparing...")
+    init_send_sms()
+    lcd.message("Sending...")
+    send_sms(number, message)
+    lcd.message("Done.")
+    sleep(1)
+    return
 
 def gui_recv_sms():
-
+    print("recv")
+    recv_sms()
 
 # --- --- --- --- --- --- --- --- --- --- --- ---
 
