@@ -21,7 +21,7 @@ lcd_columns   = 16
 lcd_rows      = 2
 
 # GPIO, serial and LCD setup
-GPIO.setmode(GPIO.BOARD)
+#GPIO.setmode(GPIO.BOARD)
 port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
 
@@ -160,6 +160,7 @@ def update_lcd_until_enter(msg, scroll=False):
     print("upd_lcd")
     lcd.blink(True)
     result = ""
+    lcd.clear()
     lcd.message(msg.format(result))
     while (True):
         ch = getch()
@@ -170,7 +171,10 @@ def update_lcd_until_enter(msg, scroll=False):
         elif ch == 27:
             break
         result = result + ch
-        lcd.message(msg.format(result)) # TODO scroll support
+        if not scroll:
+            lcd.message(ch)
+        else:
+            lcd.message('?') # TODO scroll support
     lcd.blink(False)
     return (result, False)
 
@@ -183,17 +187,21 @@ def gui_send_sms():
     if not status:
         return
     lcd.clear()
+    sleep(1)
     lcd.message("Preparing...")
     init_send_sms()
+    lcd.clear()
     lcd.message("Sending...")
+    sleep(1)
     send_sms(number, message)
+    lcd.clear()
     lcd.message("Done.")
     sleep(1)
     return
 
 def gui_recv_sms():
     print("recv")
-    (message, status) = recv_sms()
+    #(message, status) = recv_sms()
     if not status:
         return
     print(message)
@@ -206,7 +214,7 @@ def main():
     while (True):
         lcd.clear()
         lcd.blink(False)
-        lcd.message('(1) Send SMS\n(2)Recv SMS')
+        lcd.message('(1) Send SMS\n(2) Recv SMS')
 
         ch = getch()
         print(str(ch))
