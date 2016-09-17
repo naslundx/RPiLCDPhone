@@ -22,8 +22,7 @@ lcd_columns   = 16
 lcd_rows      = 2
 
 # GPIO, serial and LCD setup
-subprocess.call('stopserial.sh')
-#GPIO.setmode(GPIO.BOARD)
+#subprocess.call('stopserial.sh')
 port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
 
@@ -53,32 +52,32 @@ def init_send_sms():
     port.write('AT\r\n')
     rcv = port.read(10)
     print(rcv)
-    if not 'OK' in rcv:
-        return False
+    #if not 'OK' in rcv:
+    #    return False
     sleep(1)
     
     # Disable the Echo
     port.write('ATE0\r\n')      
     rcv = port.read(10)
-    print(rcv)
-    if not 'OK' in rcv:
-        return False
+    print("!"+rcv)
+    #if not 'OK' in rcv:
+    #    return False
     sleep(1)
     
     # Select Message format as Text mode 
     port.write('AT+CMGF=1\r\n')  
     rcv = port.read(10)
-    print(rcv)
-    if not 'OK' in rcv:
-        return False
+    print("!"+rcv)
+    #if not 'OK' in rcv:
+    #    return False
     sleep(1)
     
     # New SMS Message Indications
     port.write('AT+CNMI=2,1,0,0,0\r\n')   
     rcv = port.read(10)
-    print(rcv)
-    if not 'OK' in rcv:
-        return False
+    print("!"+rcv)
+    #if not 'OK' in rcv:
+    #    return False
     sleep(1)
     print("Send SMS Initialized.")
     return True
@@ -89,22 +88,21 @@ def send_sms(number, message):
     # Pass on recepient number
     port.write('AT+CMGS="%s"\r\n' % number)
     rcv = port.read(10)
-    print(rcv)
-    if not 'OK' in rcv:
-        return False
+    print("!"+rcv)
+    #if not 'OK' in rcv:
+    #    return False
     sleep(1)
     
     # Pass on message
     port.write('%s\r\n' % message)
     rcv = port.read(10)
-    print(rcv)
-    print rcv
+    print("!"+rcv)
     
     # Send
     port.write("\x1A")
     for i in range(10):
         rcv = port.read(10)
-        print rcv
+        print "!"+rcv
 
     return True
 
@@ -113,44 +111,46 @@ def recv_sms():
     port.write('AT'+'\r\n')
     port.write("\x0D\x0A")
     rcv = port.read(10)
-    print(rcv)
-    if not 'OK' in rcv:
-        return ('', False)
+    print("!"+rcv)
+    #if not 'OK' in rcv:
+    #    return ('', False)
     sleep(1)
     
     # Disable the Echo
     port.write('ATE0'+'\r\n')                 
     rcv = port.read(10)
-    print(rcv)
-    if not 'OK' in rcv:
-        return ('', False)
+    print("!"+rcv)
+    #if not 'OK' in rcv:
+    #    return ('', False)
     sleep(1)
     
     # Select Message format as Text mode
     port.write('AT+CMGF=1'+'\r\n')             
     rcv = port.read(10)
-    print(rcv)
-    if not 'OK' in rcv:
-        return ('', False)
+    print("!"+rcv)
+    #if not 'OK' in rcv:
+    #    return ('', False)
     sleep(1)
     
     # New SMS Message Indications
     port.write('AT+CNMI=2,1,0,0,0'+'\r\n')      
     rcv = port.read(10)
-    print(rcv)
-    if not 'OK' in rcv:
-        return ('', False)
+    print("!"+rcv)
+    #if not 'OK' in rcv:
+    #    return ('', False)
     sleep(1)
+
+    # TODO move the above to its own method
     
     while True:
         rcv = port.read(10)
-        print rcv
+        print "!"+rcv
         fd=rcv
         # check if any data received 
         if len(rcv)>3:                   
             for i in range(5):            
                 rcv = port.read(10)
-                print rcv
+                print "!"+rcv
                 fd=fd+rcv                
     
             # Extract the message number shown in between the characters "," and '\r'
@@ -187,9 +187,9 @@ def update_lcd_until_enter(msg, scroll=False):
         if not scroll:
             lcd.message(ch)
         else:
-            if len(message) < 16:
+            if len(result) < 16:
                 lcd.message(ch)
-            else
+            else:
                 lcd.clear()
                 lcd.message(msg.format(result[(len(result)-16):])) 
     lcd.blink(False)
@@ -226,7 +226,7 @@ def gui_send_sms():
 
 def gui_recv_sms():
     print("recv")
-    #(message, status) = recv_sms()
+    (message, status) = recv_sms()
     if not status:
         return
     print(message)
