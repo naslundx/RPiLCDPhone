@@ -8,8 +8,8 @@ else
     git clone https://github.com/naslundx/RPiLCDPhone
 fi
 
-sh /home/pi/RPiLCDPhone/stopserial.sh
-sudo sh /home/pi/RPiLCDPhone/stopserial.sh
+bash /home/pi/RPiLCDPhone/stopserial.sh
+sudo bash /home/pi/RPiLCDPhone/stopserial.sh
 cp /home/pi/RPiLCDPhone/rpilcdbootscript.sh /home/pi/rpilcdbootscript.sh
 
 # sudo update-rc.d lightdm disable  # Make sure X server is off
