@@ -60,7 +60,7 @@ def rotary():
             flag=new_flag
         if not flag and counter >= 2:
             false_flag_tick += 1
-        else
+        else:
             false_flag_tick = 0
 
         if false_flag_tick > 100 and counter >= 2:
@@ -202,7 +202,6 @@ def update_lcd_until_enter(msg, scroll=False):
     lcd.message(msg.format(result))
     while (True):
         ch = rotary() #getch()
-        print(str(ch))
         if ch == '\r':
             lcd.blink(False)
             return (result, True)
@@ -267,7 +266,6 @@ def main():
         lcd.message('(1) Send SMS\n(2) Recv SMS')
 
         ch = rotary() #getch()
-        print(str(ch))
 
         # Check what to do
         if ch == '1':
