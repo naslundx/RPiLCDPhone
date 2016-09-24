@@ -50,7 +50,7 @@ def rotary():
             return result
     return "0"
 
-def update_lcd_until_enter(msg, scroll=False):
+def update_lcd_until_enter(lcd, msg, scroll=False):
     print("upd_lcd")
     lcd.blink(True)
     result = ""

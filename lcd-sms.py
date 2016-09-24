@@ -155,10 +155,10 @@ def recv_sms():
 
 def gui_send_sms():
     print("send")
-    (number, status) = update_lcd_until_enter("Enter number:\n{0}")
+    (number, status) = update_lcd_until_enter(lcd, "Enter number:\n{0}")
     if not status:
         return
-    (message, status) = update_lcd_until_enter("Enter message:\n{0}", True)
+    (message, status) = update_lcd_until_enter(lcd, "Enter message:\n{0}", True)
     if not status:
         return
     lcd.clear()
