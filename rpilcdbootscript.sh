@@ -1,6 +1,12 @@
-sudo rm -rf /home/pi/RPiLCDPhone/
-cd /home/pi/
-git clone https://github.com/naslundx/RPiLCDPhone
+WIFI_LIST=$(nmcli -t -f ssid dev wifi| cut -d\' -f2)
+if [[ "$WIFI_LIST" == "" ]]
+then
+    echo "No WiFi"
+else
+    sudo rm -rf /home/pi/RPiLCDPhone/
+    cd /home/pi/
+    git clone https://github.com/naslundx/RPiLCDPhone
+fi
 
 sh /home/pi/RPiLCDPhone/stopserial.sh
 sudo sh /home/pi/RPiLCDPhone/stopserial.sh
