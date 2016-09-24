@@ -22,9 +22,11 @@ lcd_columns   = 16
 lcd_rows      = 2
 
 # GPIO, serial and LCD setup
-#subprocess.call('stopserial.sh')
 port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
+
+# Rotary setup
+GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # Read single character without waiting for enter
 def getch():
@@ -43,6 +45,29 @@ def find(str, ch):
     for i, ltr in enumerate(str):
         if ltr == ch:
             yield i
+
+
+# Get digit from rotary dial
+def rotary():
+    flag=False
+    counter=0
+    false_flag_tick=0
+    while True:
+        sleep(0.001)
+        new_flag=(GPIO.input(21)==1)
+        if flag != new_flag:
+            counter += 1
+            flag=new_flag
+        if not flag and counter >= 2:
+            false_flag_tick += 1
+        else
+            false_flag_tick = 0
+
+        if false_flag_tick > 100 and counter >= 2:
+            result = str(counter/2 - 1)
+            print(result)
+            return result
+    return "0" 
 
 
 # Initialize send SMS
@@ -176,7 +201,7 @@ def update_lcd_until_enter(msg, scroll=False):
     lcd.clear()
     lcd.message(msg.format(result))
     while (True):
-        ch = getch()
+        ch = rotary() #getch()
         print(str(ch))
         if ch == '\r':
             lcd.blink(False)
@@ -241,7 +266,7 @@ def main():
         lcd.blink(False)
         lcd.message('(1) Send SMS\n(2) Recv SMS')
 
-        ch = getch()
+        ch = rotary() #getch()
         print(str(ch))
 
         # Check what to do
