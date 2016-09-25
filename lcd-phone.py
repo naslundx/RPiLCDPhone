@@ -68,6 +68,7 @@ def gui_call():
 
 # Main loop
 def main():
+    ringer(1)
     while (True):
         gui_call()
 
