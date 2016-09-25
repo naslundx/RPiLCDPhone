@@ -1,12 +1,12 @@
-WIFI_LIST=$(nmcli -t -f ssid dev wifi| cut -d\' -f2)
-if [[ "$WIFI_LIST" == "" ]]
-then
-    echo "No WiFi"
-else
+# WIFI_LIST=$(nmcli -t -f ssid dev wifi| cut -d\' -f2)
+# if [[ "$WIFI_LIST" == "" ]]
+# then
+#     echo "No WiFi"
+# else
     sudo rm -rf /home/pi/RPiLCDPhone/
     cd /home/pi/
     git clone https://github.com/naslundx/RPiLCDPhone
-fi
+# fi
 
 bash /home/pi/RPiLCDPhone/stopserial.sh
 sudo bash /home/pi/RPiLCDPhone/stopserial.sh

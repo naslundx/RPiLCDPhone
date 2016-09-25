@@ -37,7 +37,7 @@ def init_call(number):
 
 def gui_call():
     print("call")
-    (number, status) = update_lcd_until_enter(lcd, "Enter number:\n{0}")
+    (number, status) = update_lcd_until_enter(lcd, "XEnter number:\n{0}")
     if not status:
         return
     sleep(0.5)
