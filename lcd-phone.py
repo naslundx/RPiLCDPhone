@@ -25,19 +25,32 @@ lcd_rows      = 2
 # GPIO, serial and LCD setup
 port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
+GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Rotary
+GPIO.setup(20, GPIO.OUT)  # Ringer
+GPIO.output(20, GPIO.LOW)
 
-# Rotary setup
-GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def call():
     False
 
+
 def init_call(number):
     False
 
+
+def recv_call():
+    None
+
+
+def ringer(time):
+    GPIO.output(20, GPIO.HIGH)
+    sleep(time)
+    GPIO.output(20, GPIO.LOW)
+
+
 def gui_call():
     print("call")
-    (number, status) = update_lcd_until_enter(lcd, "XEnter number:\n{0}")
+    (number, status) = update_lcd_until_enter(lcd, "Enter number:\n{0}")
     if not status:
         return
     sleep(0.5)
