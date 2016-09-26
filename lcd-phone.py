@@ -26,9 +26,14 @@ lcd_rows      = 2
 port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
 GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Rotary
+GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Hook
 GPIO.setup(20, GPIO.OUT)  # Ringer
 GPIO.output(20, GPIO.LOW)
 start_modem()
+
+def hook_lifted():
+    return (GPIO.input(26) != 0)
+
 
 def call():
     False
