@@ -22,9 +22,10 @@ lcd_backlight = 4
 lcd_columns   = 16
 lcd_rows      = 2
 
-# GPIO, serial and LCD setup
+# GPIO, serial, modem and LCD setup
 port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
+start_modem()
 
 # Rotary setup
 GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)

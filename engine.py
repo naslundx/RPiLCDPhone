@@ -74,3 +74,12 @@ def update_lcd_until_enter(lcd, msg, scroll=False):
                 lcd.message(msg.format(result[(len(result)-16):])) 
     lcd.blink(False)
     return (result, False)
+
+# Start GSM modem
+def start_modem():
+    print "Starting modem..."
+    GPIO.setup(16, GPIO.OUT)
+    GPIO.output(16, GPIO.HIGH)
+    sleep(0.5)
+    GPIO.output(16, GPIO.LOW)
+
