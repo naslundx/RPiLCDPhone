@@ -73,13 +73,14 @@ def gui_call():
 
 # Main loop
 def main():
-    ringer(1)
+    # ringer(1)
     while (True):
-        sleep(0.25)
+        sleep(0.75)
         if hook_lifted():
             gui_call()
         else:
             lcd.clear()
+            sleep(0.25)
             lcd.message("Ready")
 
 
