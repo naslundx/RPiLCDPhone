@@ -75,8 +75,12 @@ def gui_call():
 def main():
     ringer(1)
     while (True):
-        gui_call()
-
+        sleep(0.25)
+        if hook_lifted():
+            gui_call()
+        else:
+            lcd.clear()
+            lcd.message("Ready")
 
 
 if __name__ == "__main__":
