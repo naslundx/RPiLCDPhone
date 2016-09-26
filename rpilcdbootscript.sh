@@ -1,3 +1,7 @@
+echo "Sleeping before init"
+sleep 2s
+echo "Running"
+
 # WIFI_LIST=$(nmcli -t -f ssid dev wifi| cut -d\' -f2)
 # if [[ "$WIFI_LIST" == "" ]]
 # then
