@@ -9,7 +9,7 @@ import subprocess
 from subprocess import *
 from time import sleep, strftime
 from datetime import datetime
-from engine import getch, find, rotary, update_lcd_until_enter, start_modem
+from engine import rotary, update_lcd_until_enter, start_modem
 
 # Raspberry Pi pin configuration:
 lcd_rs = 27

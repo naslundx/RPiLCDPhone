@@ -33,7 +33,7 @@ def rotary():
                 result = str(ctr)
                 print(result)
                 return result
-            else
+            else:
                 break
         
     return None
