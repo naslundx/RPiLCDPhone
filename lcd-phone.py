@@ -42,7 +42,7 @@ def rotary():
         if flag != new_flag:
             counter += 1
             flag = new_flag
-        if not flag and counter >= 2:
+        if not flag:
             false_flag_tick += 1
         else:
             false_flag_tick = 0
@@ -59,7 +59,7 @@ def rotary():
     return None
 
 
-def update_lcd_until_enter(lcd, msg, scroll=False):
+def update_lcd_until_enter(lcd, msg):
     print("upd_lcd")
     lcd.blink(True)
     result = ""
@@ -77,18 +77,14 @@ def update_lcd_until_enter(lcd, msg, scroll=False):
             break
 
     lcd.blink(False)
-    return (result, False)
+    return (result, True)
 
 
 def hook_lifted():
     return (GPIO.input(26) != 0)
 
 
-def call():
-    False
-
-
-def init_call(number):
+def call(number):
     print('init_call')
     port.write('AT\r\n')
     rcv = port.read(10)
@@ -129,14 +125,9 @@ def gui_call():
     sleep(0.5)
     lcd.clear()
     sleep(0.5)
-    lcd.message("Preparing...")
-    status = init_call(number)
-    if not status:
-        return
     lcd.message("Calling...")
-    status = call()
-    if not status:
-        return
+    status = call(number)
+    print(status)
 
 # --- --- --- --- --- --- --- --- --- --- --- ---
 
