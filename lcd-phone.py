@@ -77,7 +77,7 @@ def update_lcd_until_enter(lcd, msg):
             break
 
     lcd.blink(False)
-    return (result, True)
+    return (result, len(result) >= 10)
 
 
 def hook_lifted():
@@ -91,7 +91,9 @@ def call(number):
     print(rcv)
 
     port.write('ATD' + number + '\r\n')
-    rcv = port.read(20)
+    rcv = port.read(10)
+    print(rcv)
+    rcv = port.read(10)
     print(rcv)
 
     while hook_lifted():
