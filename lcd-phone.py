@@ -9,7 +9,6 @@ import subprocess
 from subprocess import *
 from time import sleep, strftime
 from datetime import datetime
-from engine import rotary, update_lcd_until_enter, start_modem
 
 # Raspberry Pi pin configuration:
 lcd_rs = 27
@@ -30,6 +29,64 @@ GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Hook
 GPIO.setup(20, GPIO.OUT)  # Ringer
 GPIO.output(20, GPIO.LOW)
 start_modem()
+
+
+# Get digit from rotary dial
+def rotary():
+    flag = False
+    counter = 0
+    false_flag_tick = 0
+    while True:
+        sleep(0.001)
+        new_flag = (GPIO.input(21) == 1)
+        if flag != new_flag:
+            counter += 1
+            flag = new_flag
+        if not flag and counter >= 2:
+            false_flag_tick += 1
+        else:
+            false_flag_tick = 0
+
+        if false_flag_tick > 100:
+            ctr = int(counter / 2) - 1
+            if ctr >= 0:
+                result = str(ctr)
+                print(result)
+                return result
+            else:
+                break
+        
+    return None
+
+
+def update_lcd_until_enter(lcd, msg, scroll=False):
+    print("upd_lcd")
+    lcd.blink(True)
+    result = ""
+    lcd.clear()
+    lcd.message(msg.format(result))
+    while hook_lifted():
+        ch = rotary()
+        if ch == '\r':
+            lcd.blink(False)
+            return (result, True)
+        elif ch:
+            result = result + ch
+            lcd.message(ch)
+        elif len(result) >= 10:
+            break
+
+    lcd.blink(False)
+    return (result, False)
+
+
+# Start GSM modem
+def start_modem():
+    print "Starting modem..."
+    GPIO.setup(16, GPIO.OUT)
+    GPIO.output(16, GPIO.HIGH)
+    sleep(0.5)
+    GPIO.output(16, GPIO.LOW)
 
 
 def hook_lifted():
