@@ -90,7 +90,7 @@ def call(number):
     rcv = port.read(10)
     print(rcv)
 
-    port.write('ATD' + number + '\r\n')
+    port.write('ATD' + number + ';\r\n')
     rcv = port.read(10)
     print(rcv)
     rcv = port.read(10)
