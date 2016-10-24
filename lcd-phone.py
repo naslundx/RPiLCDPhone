@@ -90,8 +90,8 @@ def call(number):
     rcv = port.read(10)
     print(rcv)
 
-    port.write('ATD' + number + ' \r\n')
-    rcv = port.read(10)
+    port.write('ATD' + number + '\r\n')
+    rcv = port.read(20)
     print(rcv)
 
     while hook_lifted():
