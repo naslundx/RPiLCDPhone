@@ -21,14 +21,14 @@ lcd_backlight = 4
 lcd_columns = 16
 lcd_rows = 2
 
-# GPIO, serial, modem and LCD setup
-port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
-lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
-GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Rotary
-GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Hook
-GPIO.setup(20, GPIO.OUT)  # Ringer
-GPIO.output(20, GPIO.LOW)
-start_modem()
+
+# Start GSM modem
+def start_modem():
+    print "Starting modem..."
+    GPIO.setup(16, GPIO.OUT)
+    GPIO.output(16, GPIO.HIGH)
+    sleep(0.5)
+    GPIO.output(16, GPIO.LOW)
 
 
 # Get digit from rotary dial
@@ -78,15 +78,6 @@ def update_lcd_until_enter(lcd, msg, scroll=False):
 
     lcd.blink(False)
     return (result, False)
-
-
-# Start GSM modem
-def start_modem():
-    print "Starting modem..."
-    GPIO.setup(16, GPIO.OUT)
-    GPIO.output(16, GPIO.HIGH)
-    sleep(0.5)
-    GPIO.output(16, GPIO.LOW)
 
 
 def hook_lifted():
@@ -149,22 +140,24 @@ def gui_call():
 
 # --- --- --- --- --- --- --- --- --- --- --- ---
 
+# GPIO, serial, modem and LCD setup
+port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
+lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
+GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Rotary
+GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Hook
+GPIO.setup(20, GPIO.OUT)  # Ringer
+GPIO.output(20, GPIO.LOW)
+start_modem()
 
 # Main loop
-def main():
-    # ringer(1)
-    while True:
-        print("Main loop")
-        sleep(0.5)
-        if hook_lifted():
-            gui_call()
+while True:
+    print("Main loop")
+    sleep(0.5)
+    if hook_lifted():
+        gui_call()
 
-        # recv_call()
+    # recv_call()
 
-        lcd.clear()
-        sleep(0.5)
-        lcd.message("Ready")
-
-
-if __name__ == "__main__":
-    main()
+    lcd.clear()
+    sleep(0.5)
+    lcd.message("Ready")
