@@ -10,7 +10,7 @@ class pi_modem:
     
 
     def power_on(self):
-        self.hardware.on(self.power_pin, 0.5)
+        self.hardware.pin_on(self.power_pin, 0.5)
 
 
     def caller_id(self):

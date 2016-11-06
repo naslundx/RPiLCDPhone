@@ -7,25 +7,25 @@ import RPi.GPIO as GPIO
 
 class pi_hardware:
     def __init__(self, rotary_pin, hook_pin, ringer_pin, debug=False):
+	self.debug = debug
         self.rotary_pin = rotary_pin
         self.set_pin_in(self.rotary_pin)
         self.hook_pin = hook_pin
         self.set_pin_in(self.hook_pin)
         self.ringer_pin = ringer_pin
         self.set_pin_out(self.ringer_pin)
-        self.debug = debug
         self.serial_port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
 
 
     def set_pin_in(self, pin):
         if self.debug:
-            print("Pin #" + pin + " set to IN")
+            print("Pin #" + str(pin) + " set to IN")
         GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
     def set_pin_out(self, pin):
         if self.debug:
-            print("Pin #" + pin + " set to OUT and LOW")
+            print("Pin #" + str(pin) + " set to OUT and LOW")
         GPIO.setup(pin, GPIO.OUT)
         GPIO.output(pin, GPIO.LOW)
 
@@ -33,13 +33,13 @@ class pi_hardware:
     def read_pin(self, pin):
         result = (GPIO.input(pin) != 0)
         if self.debug:
-            print("Pin #" + pin + " reads " + result)
+            print("Pin #" + str(pin) + " reads " + str(result))
         return result
 
 
     def pin_on(self, pin, time):
         if self.debug:
-            print("Voltage on pin #" + pin + " for " + time + "s")
+            print("Voltage on pin #" + str(pin) + " for " + str(time) + "s")
         GPIO.output(pin, GPIO.HIGH)
         sleep(time)
         GPIO.output(pin, GPIO.LOW)
@@ -65,7 +65,7 @@ class pi_hardware:
         while iterations > 0:
             iterations -= 1
             sleep(0.1)
-            message = port.read(10)
+            message = self.serial_port.read(10)
             if message:
                 full_message = full_message + message
             else:
