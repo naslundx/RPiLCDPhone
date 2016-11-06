@@ -18,6 +18,6 @@ cp /home/pi/RPiLCDPhone/rpilcdbootscript.sh /home/pi/rpilcdbootscript.sh
 
 # sudo update-rc.d lightdm disable  # Make sure X server is off
 
-sudo python /home/pi/RPiLCDPhone/lcd-phone.py
+sudo python /home/pi/RPiLCDPhone/piphone.py
 
 # sudo reboot  # Reboot on failure
