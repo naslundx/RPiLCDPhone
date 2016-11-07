@@ -10,7 +10,7 @@ class pi_phone:
         self.debug = debug
 
 
-    def loop():
+    def loop(self):
         sleep(0.5)
         self.hardware.ring(1.0)
         sleep(0.5)
@@ -24,7 +24,7 @@ class pi_phone:
                 self.receive_call()
 
     
-    def make_call():
+    def make_call(self):
         number = self.hardware.get_rotary()
         if not self.hardware.hook_lifted():
             return
@@ -36,7 +36,7 @@ class pi_phone:
         self.modem.hang_up()
 
     
-    def receive_call():
+    def receive_call(self):
         incoming = self.modem.check_incoming_call()
         if incoming:
             while not self.hardware.hook_lifted():
