@@ -11,7 +11,7 @@ class pi_modem:
         self.debug = debug
 
     def power_on(self):
-        self.hardware.pin_on(self.power_pin, 0.5)
+        self.hardware.pin_on(self.power_pin, 5.0)
 
     def caller_id(self):
         self.hardware.serial_write('AT+CLIP=1')

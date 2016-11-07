@@ -5,6 +5,8 @@ from pi_phone import pi_phone
 from pi_debug import pi_debug
 from time import sleep
 
+print('RPiLCDPhone: Starting.')
+
 GPIO.setmode(GPIO.BCM)
 
 debugger = pi_debug(debug=True)
@@ -16,4 +18,7 @@ sleep(1.0)
 modem.power_on()
 sleep(1.0)
 # self.hardware.ring(1.0)
+
+print('RPiLCDPhone: Initialized. Starting loop.')
+
 phone.loop()
