@@ -26,9 +26,13 @@ class pi_modem:
 
 
     def call(self, number):
+        if self.debug:
+            print('\tcall()')
         if not self.check_status():
             return
 
+        if self.debug:
+            print('\tactually make call')
         self.hardware.serial_write('ATD' + number + ';')
         rcv = self.hardware.serial_read()
 
@@ -45,7 +49,7 @@ class pi_modem:
         rcv = self.hardware.serial_read()
         
         if 'RING' in rcv:
-            number = rcv.split(',')[0].split(': ')[1]
+            number = rcv.split(',')[0].split(': ')[1].replace('"','')
             if self.debug:
                 print("Number='" + number + "'")
             return number

@@ -50,12 +50,12 @@ class pi_hardware:
 
 
     def hook_lifted(self):
-        self.read_pin(self.hook_pin)
+        return self.read_pin(self.hook_pin)
 
     
     def serial_write(self, message):
         if self.debug:
-            print("Serial out:'" + message + "'")
+            print("Serial out:\t" + message)
         self.serial_port.write(message + '\r\n')
 
 
@@ -71,8 +71,9 @@ class pi_hardware:
             else:
                 break
         
+        full_message = full_message.replace('\r\n',' ').replace('\n',' ')
         if self.debug:
-            print("Serial in:  '" + full_message + "'")
+            print("Serial in:\t" + full_message)
         return full_message
 
 

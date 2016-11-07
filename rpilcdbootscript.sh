@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Sleeping before init"
 sleep 2s
 echo "Running"

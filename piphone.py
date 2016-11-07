@@ -12,4 +12,6 @@ phone = pi_phone(hardware=hardware, modem=modem, debug=True)
 
 sleep(1.0)
 modem.power_on()
+sleep(1.0)
+# self.hardware.ring(1.0)
 phone.loop()
