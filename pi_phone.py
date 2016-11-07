@@ -11,7 +11,9 @@ class pi_phone:
 
 
     def loop():
-        self.hardware.ring(0.1)
+        sleep(0.5)
+        self.hardware.ring(1.0)
+        sleep(0.5)
         while True:
             if self.debug:
                 print('.')

@@ -46,7 +46,7 @@ class pi_hardware:
 
 
     def ring(self, time):
-        self.set_on(self.ringer_pin, time)
+        self.pin_on(self.ringer_pin, time)
 
 
     def hook_lifted(self):
