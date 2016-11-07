@@ -6,8 +6,8 @@ import serial
 import RPi.GPIO as GPIO
 
 class pi_hardware:
-    def __init__(self, rotary_pin, hook_pin, ringer_pin, debug=False):
-	self.debug = debug
+    def __init__(self, rotary_pin, hook_pin, ringer_pin, debugger):
+	    self.debugger = debugger
         self.rotary_pin = rotary_pin
         self.set_pin_in(self.rotary_pin)
         self.hook_pin = hook_pin
@@ -18,28 +18,24 @@ class pi_hardware:
 
 
     def set_pin_in(self, pin):
-        if self.debug:
-            print("Pin #" + str(pin) + " set to IN")
+        self.debugger.out("Pin #" + str(pin) + " set to IN")
         GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
     def set_pin_out(self, pin):
-        if self.debug:
-            print("Pin #" + str(pin) + " set to OUT and LOW")
+        self.debugger.out("Pin #" + str(pin) + " set to OUT and LOW")
         GPIO.setup(pin, GPIO.OUT)
         GPIO.output(pin, GPIO.LOW)
 
 
     def read_pin(self, pin):
         result = (GPIO.input(pin) != 0)
-        if self.debug:
-            print("Pin #" + str(pin) + " reads " + str(result))
+        self.debugger.out("Pin #" + str(pin) + " reads " + str(result))
         return result
 
 
     def pin_on(self, pin, time):
-        if self.debug:
-            print("Voltage on pin #" + str(pin) + " for " + str(time) + "s")
+        self.debugger.out("Voltage on pin #" + str(pin) + " for " + str(time) + "s")
         GPIO.output(pin, GPIO.HIGH)
         sleep(time)
         GPIO.output(pin, GPIO.LOW)
@@ -54,8 +50,7 @@ class pi_hardware:
 
     
     def serial_write(self, message):
-        if self.debug:
-            print("Serial out:\t" + message)
+        self.debugger.out("Serial out:\t" + message)
         self.serial_port.write(message + '\r\n')
 
 
@@ -72,8 +67,7 @@ class pi_hardware:
                 break
         
         full_message = full_message.replace('\r\n',' ').replace('\n',' ')
-        if self.debug:
-            print("Serial in:\t" + full_message)
+        self.debugger.out("Serial in:\t" + full_message)
         return full_message
 
 

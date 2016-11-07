@@ -3,7 +3,8 @@ from pi_modem import pi_modem
 from time import sleep
 
 class pi_phone:
-    def __init__(self, hardware, modem, debug=False):
+    def __init__(self, hardware, modem, debugger):
+        self.debugger = debugger
         self.hardware = hardware
         self.modem = modem
         self.modem.caller_id()
@@ -35,12 +36,11 @@ class pi_phone:
         incoming = self.modem.check_incoming_call()
         while incoming and not self.hardware.hook_lifted():
             self.hardware.ring(1.0)
-            sleep(0.2)
+            sleep(0.05)
             incoming = self.modem.check_incoming_call()
 
         if incoming:
-            if self.debug:
-                print('Receiving call')
+            self.debugger.out('Receiving call')
             self.modem.receive()
             while self.hardware.hook_lifted():
                 sleep(0.5)

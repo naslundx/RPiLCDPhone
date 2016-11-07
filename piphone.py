@@ -2,13 +2,15 @@ import RPi.GPIO as GPIO
 from pi_hardware import pi_hardware
 from pi_modem import pi_modem
 from pi_phone import pi_phone
+from pi_debug import pi_debug
 from time import sleep
 
 GPIO.setmode(GPIO.BCM)
 
-hardware = pi_hardware(rotary_pin=21, hook_pin=26, ringer_pin=20, debug=True)
-modem = pi_modem(hardware=hardware, power_pin=16, debug=True)
-phone = pi_phone(hardware=hardware, modem=modem, debug=True)
+debugger = pi_debug(debug=True)
+hardware = pi_hardware(rotary_pin=21, hook_pin=26, ringer_pin=20, debugger)
+modem = pi_modem(hardware=hardware, power_pin=16, debugger)
+phone = pi_phone(hardware=hardware, modem=modem, debugger)
 
 sleep(1.0)
 modem.power_on()

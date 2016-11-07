@@ -2,7 +2,8 @@ from pi_hardware import pi_hardware
 from time import sleep
 
 class pi_modem:
-    def __init__(self, hardware, power_pin, debug=False):
+    def __init__(self, hardware, power_pin, debugger):
+        self.debugger = debugger
         self.hardware = hardware
         self.power_pin = power_pin
         self.hardware.set_pin_out(self.power_pin)
@@ -26,13 +27,9 @@ class pi_modem:
 
 
     def call(self, number):
-        if self.debug:
-            print('\tcall()')
         if not self.check_status():
             return
 
-        if self.debug:
-            print('\tactually make call')
         self.hardware.serial_write('ATD' + number + ';')
         rcv = self.hardware.serial_read()
 
@@ -50,8 +47,7 @@ class pi_modem:
         
         if 'RING' in rcv:
             number = rcv.split(',')[0].split(': ')[1].replace('"','')
-            if self.debug:
-                print("Number='" + number + "'")
+            self.debugger.out("Incoming number='" + number + "'")
             return number
 
         return None
