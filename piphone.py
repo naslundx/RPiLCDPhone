@@ -10,9 +10,9 @@ print('RPiLCDPhone: Starting.')
 GPIO.setmode(GPIO.BCM)
 
 debugger = pi_debug(debug=True)
-hardware = pi_hardware(rotary_pin=21, hook_pin=26, ringer_pin=20, debugger)
-modem = pi_modem(hardware=hardware, power_pin=16, debugger)
-phone = pi_phone(hardware=hardware, modem=modem, debugger)
+hardware = pi_hardware(rotary_pin=21, hook_pin=26, ringer_pin=20, debugger=debugger)
+modem = pi_modem(hardware=hardware, power_pin=16, debugger=debugger)
+phone = pi_phone(hardware=hardware, modem=modem, debugger=debugger)
 
 sleep(1.0)
 modem.power_on()

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Sleeping before init"
-sleep 2s
+# sleep 2s
 echo "Running"
 
 # WIFI_LIST=$(nmcli -t -f ssid dev wifi| cut -d\' -f2)
@@ -9,9 +9,9 @@ echo "Running"
 # then
 #     echo "No WiFi"
 # else
-    sudo rm -rf /home/pi/RPiLCDPhone/
-    cd /home/pi/
-    git clone https://github.com/naslundx/RPiLCDPhone
+    # sudo rm -rf /home/pi/RPiLCDPhone/
+    # cd /home/pi/
+    # git clone https://github.com/naslundx/RPiLCDPhone
 # fi
 
 bash /home/pi/RPiLCDPhone/stopserial.sh
