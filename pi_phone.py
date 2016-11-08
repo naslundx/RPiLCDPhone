@@ -42,4 +42,4 @@ class pi_phone:
             while self.hardware.hook_lifted():
                 sleep(0.5)
 
-        self.modem.hang_up()
+            self.modem.hang_up()
