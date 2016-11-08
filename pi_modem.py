@@ -8,11 +8,9 @@ class pi_modem:
         self.hardware = hardware
         self.power_pin = power_pin
         self.hardware.set_pin_out(self.power_pin)
-        sleep(0.5)
-        self.modem.caller_id()
 
     def power_on(self):
-        self.hardware.pin_on(self.power_pin, 3.0)
+        self.hardware.pin_on(self.power_pin, 2.0)
 
     def caller_id(self):
         self.hardware.serial_write('AT+CLIP=1')
@@ -23,7 +21,7 @@ class pi_modem:
         self.hardware.serial_write('AT')
         rcv = self.hardware.serial_read()
         status = 'OK' in rcv
-        self.debugger.out('Checked status, is ' + str(status))
+        self.debugger.out('Modem status=' + str(status))
         return status
 
     def call(self, number):

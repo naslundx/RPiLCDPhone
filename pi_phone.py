@@ -9,7 +9,22 @@ class pi_phone:
         self.hardware = hardware
         self.modem = modem
 
-    def loop(self):
+    def loop(self, force_start=False):
+        self.debugger.out("Initializing modem...")
+        while True:
+            sleep(0.5)
+            self.modem.power_on()
+            sleep(0.5)
+            if self.modem.check_status():
+                break
+            elif force_start:
+                self.debugger.out("Failed, but forcing start.")
+                break
+            else:
+                self.debugger.out("Failed, making new attempt.")
+
+        self.modem.caller_id()
+
         while True:
             sleep(1.0)
             if self.hardware.hook_lifted():
