@@ -8,7 +8,6 @@ class pi_phone:
         self.debugger = debugger
         self.hardware = hardware
         self.modem = modem
-        self.modem.caller_id()
 
     def loop(self):
         while True:

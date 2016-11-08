@@ -8,6 +8,8 @@ class pi_modem:
         self.hardware = hardware
         self.power_pin = power_pin
         self.hardware.set_pin_out(self.power_pin)
+        sleep(0.5)
+        self.modem.caller_id()
 
     def power_on(self):
         self.hardware.pin_on(self.power_pin, 5.0)
