@@ -12,7 +12,7 @@ class pi_modem:
         self.modem.caller_id()
 
     def power_on(self):
-        self.hardware.pin_on(self.power_pin, 5.0)
+        self.hardware.pin_on(self.power_pin, 3.0)
 
     def caller_id(self):
         self.hardware.serial_write('AT+CLIP=1')
