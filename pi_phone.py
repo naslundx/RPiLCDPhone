@@ -31,7 +31,7 @@ class pi_phone:
         while True:
             sleep(1.0)
             self.modem.power_on()
-            sleep(1.0)
+            sleep(5.0)
             if self.modem.check_status():
                 break
             elif force_start:
