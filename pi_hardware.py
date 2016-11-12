@@ -48,6 +48,10 @@ class pi_hardware:
     def hook_lifted(self):
         return self.read_pin(self.hook_pin)
 
+    def serial_flush(self):
+        bus = self.serial_read()
+        self.debugger.out("Flushed '%s'" % bus)
+
     def serial_write(self, message):
         self.debugger.out("Serial out: '%s'" % message)
         self.serial_port.write(message + '\r\n')

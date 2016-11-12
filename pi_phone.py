@@ -10,7 +10,9 @@ class pi_phone:
         self.modem = modem
 
     def loop(self, force_start=False):
-        self.power_on_modem(force_start)
+        self.hardware.serial_flush()
+        if not self.modem.check_status():
+            self.power_on_modem(force_start)
         self.modem.caller_id()
 
         while True:
