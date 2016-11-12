@@ -48,7 +48,7 @@ class pi_phone:
 
         if not self.modem.check_status():
             self.debugger.out("Failed to make call, modem off!")
-            break
+            return
 
         self.modem.call(number)
         while self.hardware.hook_lifted():
@@ -58,7 +58,7 @@ class pi_phone:
 
     def receive_call(self):
         incoming = self.modem.check_incoming_call()
-        while incoming and not self.hardware.hook_lifted() and self.modem.check_status():
+        while incoming and not self.hardware.hook_lifted():
             self.hardware.ring(1.0)
             sleep(0.05)
             incoming = self.modem.check_incoming_call()
