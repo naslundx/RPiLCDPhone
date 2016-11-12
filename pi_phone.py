@@ -1,6 +1,6 @@
 from pi_hardware import pi_hardware
 from pi_modem import pi_modem
-from time import sleep
+from time import self.debugger.wait
 
 
 class pi_phone:
@@ -17,7 +17,7 @@ class pi_phone:
 
         while True:
             print('')
-            sleep(1.0)
+            self.debugger.wait(1.0)
             if self.modem.no_modem_response() and self.modem.allow_restart:
                 self.power_on_modem()
             
@@ -29,9 +29,9 @@ class pi_phone:
     def power_on_modem(self, force_start=False):
         self.debugger.out("Initializing modem...")
         while True:
-            sleep(1.0)
+            self.debugger.wait(1.0)
             self.modem.power_on()
-            sleep(5.0)
+            self.debugger.wait(5.0)
             if self.modem.check_status():
                 break
             elif force_start:
@@ -39,7 +39,7 @@ class pi_phone:
                 break
             else:
                 self.debugger.out("Failed, making new attempt.")
-        sleep(0.5)
+        self.debugger.wait(0.5)
 
     def make_call(self):
         number = self.hardware.get_rotary()
@@ -52,7 +52,7 @@ class pi_phone:
 
         self.modem.call(number)
         while self.hardware.hook_lifted():
-            sleep(1.0)
+            self.debugger.wait(1.0)
 
         self.modem.hang_up()
 
@@ -60,13 +60,13 @@ class pi_phone:
         incoming = self.modem.check_incoming_call()
         while incoming and not self.hardware.hook_lifted():
             self.hardware.ring(1.0)
-            sleep(0.05)
+            self.debugger.wait(0.05)
             incoming = self.modem.check_incoming_call()
 
         if incoming:
             self.debugger.out('Receiving call')
             self.modem.receive()
             while self.hardware.hook_lifted():
-                sleep(0.5)
+                self.debugger.wait(0.5)
 
             self.modem.hang_up()

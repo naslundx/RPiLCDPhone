@@ -1,4 +1,4 @@
-from time import gmtime, strftime
+from time import gmtime, strftime, sleep
 
 
 class pi_debug:
@@ -8,3 +8,7 @@ class pi_debug:
     def out(self, message):
         now = strftime("%H:%M:%S", gmtime())
         print(now + ': ' + message)
+
+    def wait(self, time):
+        self.out('(Sleeping for %f s)' % time)
+        sleep(time)

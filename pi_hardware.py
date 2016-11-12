@@ -1,4 +1,3 @@
-from time import sleep
 import sys
 import tty
 import termios
@@ -35,7 +34,7 @@ class pi_hardware:
     def pin_on(self, pin, time):
         self.debugger.out("Voltage on #%d (%d s)" % (pin, time))
         GPIO.output(pin, GPIO.HIGH)
-        sleep(time)
+        self.debugger.wait(time)
         self.pin_off(pin)
 
     def pin_off(self, pin):
@@ -61,7 +60,7 @@ class pi_hardware:
         iterations = 5
         while iterations > 0:
             iterations -= 1
-            sleep(0.1)
+            self.debugger.wait(0.1)
             message = self.serial_port.read(10)
             if message:
                 full_message = full_message + message
@@ -77,7 +76,7 @@ class pi_hardware:
         # counter = 0
         # false_flag_tick = 0
         # while self.hook_lifted():
-        #     sleep(0.001)
+        #     self.debugger.wait(0.001)
         #     new_flag = (self.read_pin(self.rotary_pin))
         #     if flag != new_flag:
         #         counter += 1
@@ -96,5 +95,5 @@ class pi_hardware:
         #             break
         # return None
 
-        sleep(1.0)
+        self.debugger.wait(1.0)
         return '0738299658'

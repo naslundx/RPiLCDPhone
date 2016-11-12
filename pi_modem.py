@@ -1,5 +1,4 @@
 from pi_hardware import pi_hardware
-from time import sleep
 
 
 class pi_modem:
@@ -20,7 +19,7 @@ class pi_modem:
         rcv = self.hardware.serial_read()
 
     def check_status(self):
-        sleep(0.1)
+        self.debugger.wait(0.1)
         self.hardware.serial_write('AT')
         rcv = self.hardware.serial_read()
         status = 'OK' in rcv
