@@ -1,6 +1,5 @@
 from pi_hardware import pi_hardware
 from pi_modem import pi_modem
-from time import self.debugger.wait
 
 
 class pi_phone:
