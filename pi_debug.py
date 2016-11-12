@@ -10,5 +10,6 @@ class pi_debug:
         print(now + ': ' + message)
 
     def wait(self, time):
-        self.out('(Sleeping for %f s)' % time)
+        if time > 0.2:
+            self.out('(Sleeping for %.1f s)' % time)
         sleep(time)
