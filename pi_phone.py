@@ -8,10 +8,10 @@ class pi_phone:
         self.hardware = hardware
         self.modem = modem
 
-    def loop(self, force_start=False):
+    def loop(self):
         self.hardware.serial_flush()
         if not self.modem.check_status():
-            self.power_on_modem(force_start)
+            self.power_on_modem()
         self.modem.caller_id()
 
         while True:
@@ -25,7 +25,7 @@ class pi_phone:
             else:
                 self.receive_call()
 
-    def power_on_modem(self, force_start=False):
+    def power_on_modem(self):
         self.debugger.out("Initializing modem...")
         while True:
             self.debugger.wait(1.0)
@@ -33,12 +33,11 @@ class pi_phone:
             self.debugger.wait(5.0)
             if self.modem.check_status():
                 break
-            elif force_start:
+            elif not self.modem.allow_restart:
                 self.debugger.out("Failed, but forcing start.")
                 break
             else:
                 self.debugger.out("Failed, making new attempt.")
-        self.debugger.wait(0.5)
 
     def make_call(self):
         number = self.hardware.get_rotary()

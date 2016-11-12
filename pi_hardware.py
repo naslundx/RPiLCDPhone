@@ -32,7 +32,7 @@ class pi_hardware:
         return result
 
     def pin_on(self, pin, time):
-        self.debugger.out("Voltage on #%d (%d s)" % (pin, time))
+        self.debugger.out("Voltage on #%d" % pin)
         GPIO.output(pin, GPIO.HIGH)
         self.debugger.wait(time)
         self.pin_off(pin)

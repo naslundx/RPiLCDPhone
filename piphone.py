@@ -17,4 +17,4 @@ phone = pi_phone(hardware=hardware, modem=modem, debugger=debugger)
 sleep(0.5)
 debugger.out('RPiLCDPhone: Initialized. Starting loop.')
 
-phone.loop(force_start=False)
+phone.loop()
