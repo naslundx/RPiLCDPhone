@@ -18,7 +18,7 @@ class pi_phone:
         while True:
             print('')
             sleep(1.0)
-            if self.modem.no_modem_response() and not self.modem.allow_restart:
+            if self.modem.no_modem_response() and self.modem.allow_restart:
                 self.power_on_modem()
             
             if self.hardware.hook_lifted():
