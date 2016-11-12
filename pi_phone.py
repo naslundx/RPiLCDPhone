@@ -19,7 +19,7 @@ class pi_phone:
             self.debugger.wait(1.0)
             if self.modem.no_modem_response() and self.modem.allow_restart:
                 self.power_on_modem()
-            
+
             if self.hardware.hook_lifted():
                 self.make_call()
             else:

@@ -26,7 +26,7 @@ class pi_modem:
         self.debugger.out('Modem status=%s' % str(status))
         if len(rcv.strip()) == 0:
             self.empty_response_count += 1
-            self.debugger.out('Modem appears turned off? (%d)' % self.empty_response_count)
+            self.debugger.out('Modem off? (%d)' % self.empty_response_count)
         return status
 
     def no_modem_response(self):

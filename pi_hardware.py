@@ -2,6 +2,7 @@ import sys
 import tty
 import termios
 import serial
+from time import sleep
 import RPi.GPIO as GPIO
 
 
@@ -26,9 +27,10 @@ class pi_hardware:
         GPIO.setup(pin, GPIO.OUT)
         self.pin_off(pin)
 
-    def read_pin(self, pin):
+    def read_pin(self, pin, write_to_debug=True):
         result = (GPIO.input(pin) != 0)
-        self.debugger.out("#%d reads %s" % (pin, result))
+        if write_to_debug:
+            self.debugger.out("#%d reads %s" % (pin, result))
         return result
 
     def pin_on(self, pin, time):
@@ -72,28 +74,35 @@ class pi_hardware:
         return full_message
 
     def get_rotary(self):
-        # flag = False
-        # counter = 0
-        # false_flag_tick = 0
-        # while self.hook_lifted():
-        #     self.debugger.wait(0.001)
-        #     new_flag = (self.read_pin(self.rotary_pin))
-        #     if flag != new_flag:
-        #         counter += 1
-        #         flag = new_flag
-        #     if not flag:
-        #         false_flag_tick += 1
-        #     else:
-        #         false_flag_tick = 0
-        #     if false_flag_tick > 100:
-        #         ctr = int(counter / 2) - 1
-        #         if ctr >= 0:
-        #             result = str(ctr)
-        #             print(result)
-        #             return result
-        #         else:
-        #             break
-        # return None
+        number = ''
+        while len(number) < 10:
+            self.debugger.wait(0.05)
+            number = number + self.get_rotary_digit()
+            self.debugger.out('Number=%s' % number)
+        return number
 
-        self.debugger.wait(1.0)
-        return '0738299658'
+        # self.debugger.wait(1.0)
+        # return '0738299658'
+
+    def get_rotary_digit(self):
+        flag = False
+        counter = 0
+        false_flag_tick = 0
+        while self.hook_lifted():
+            sleep(0.001)
+            new_flag = (self.read_pin(self.rotary_pin, write_to_debug=False))
+            if flag != new_flag:
+                counter += 1
+                flag = new_flag
+            if not flag:
+                false_flag_tick += 1
+            else:
+                false_flag_tick = 0
+            if false_flag_tick > 100:
+                ctr = int(counter / 2) - 1
+                if ctr >= 0:
+                    result = str(ctr)
+                    return result
+                else:
+                    break
+        return None
