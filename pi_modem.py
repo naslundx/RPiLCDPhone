@@ -3,10 +3,11 @@ from time import sleep
 
 
 class pi_modem:
-    def __init__(self, hardware, power_pin, debugger):
+    def __init__(self, hardware, power_pin, allow_restart, debugger):
         self.debugger = debugger
         self.hardware = hardware
         self.power_pin = power_pin
+        self.allow_restart = allow_restart
         self.hardware.set_pin_out(self.power_pin)
         self.empty_response_count = 0
 

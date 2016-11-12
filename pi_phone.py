@@ -16,7 +16,7 @@ class pi_phone:
         while True:
             print('')
             sleep(1.0)
-            if self.modem.no_modem_response():
+            if self.modem.no_modem_response() and not self.modem.allow_restart:
                 self.power_on_modem()
             
             if self.hardware.hook_lifted():
@@ -27,9 +27,9 @@ class pi_phone:
     def power_on_modem(self, force_start=False):
         self.debugger.out("Initializing modem...")
         while True:
-            sleep(0.5)
+            sleep(1.0)
             self.modem.power_on()
-            sleep(0.5)
+            sleep(1.0)
             if self.modem.check_status():
                 break
             elif force_start:
