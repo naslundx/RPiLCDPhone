@@ -14,6 +14,7 @@ class pi_phone:
         self.modem.caller_id()
 
         while True:
+            print('')
             sleep(1.0)
             if self.modem.no_modem_response():
                 self.power_on_modem()

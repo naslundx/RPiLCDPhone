@@ -12,9 +12,9 @@ hardware = pi_hardware(rotary_pin=21, hook_pin=26, ringer_pin=20, debugger=debug
 modem = pi_modem(hardware=hardware, power_pin=18, debugger=debugger)
 phone = pi_phone(hardware=hardware, modem=modem, debugger=debugger)
 
-# self.hardware.ring(1.0)
+# hardware.ring(1.0)
 
 sleep(0.5)
-self.debugger.out('RPiLCDPhone: Initialized. Starting loop.')
+debugger.out('RPiLCDPhone: Initialized. Starting loop.')
 
 phone.loop(force_start=False)

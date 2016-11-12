@@ -24,7 +24,7 @@ class pi_modem:
         rcv = self.hardware.serial_read()
         status = 'OK' in rcv
         self.debugger.out('Modem status=%s' % str(status))
-        if status.whitespace():
+        if len(rcv.strip()) == 0:
             self.empty_response_count += 1
             self.debugger.out('Modem appears turned off? (%d)' % self.empty_response_count)
         return status
