@@ -9,9 +9,9 @@ echo "Running"
 # then
 #     echo "No WiFi"
 # else
-    # sudo rm -rf /home/pi/RPiLCDPhone/
-    # cd /home/pi/
-    # git clone https://github.com/naslundx/RPiLCDPhone
+    sudo rm -rf /home/pi/RPiLCDPhone/
+    cd /home/pi/
+    git clone https://github.com/naslundx/RPiLCDPhone
 # fi
 
 bash /home/pi/RPiLCDPhone/stopserial.sh

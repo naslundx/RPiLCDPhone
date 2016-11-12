@@ -10,6 +10,20 @@ class pi_phone:
         self.modem = modem
 
     def loop(self, force_start=False):
+        self.power_on_modem(force_start)
+        self.modem.caller_id()
+
+        while True:
+            sleep(1.0)
+            if self.modem.no_modem_response():
+                self.power_on_modem()
+            
+            if self.hardware.hook_lifted():
+                self.make_call()
+            else:
+                self.receive_call()
+
+    def power_on_modem(self, force_start=False):
         self.debugger.out("Initializing modem...")
         while True:
             sleep(0.5)
@@ -22,15 +36,7 @@ class pi_phone:
                 break
             else:
                 self.debugger.out("Failed, making new attempt.")
-
-        self.modem.caller_id()
-
-        while True:
-            sleep(1.0)
-            if self.hardware.hook_lifted():
-                self.make_call()
-            else:
-                self.receive_call()
+        sleep(0.5)
 
     def make_call(self):
         number = self.hardware.get_rotary()

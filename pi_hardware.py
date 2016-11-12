@@ -19,27 +19,27 @@ class pi_hardware:
         self.serial_port = serial.Serial(ttyama0, baudrate=9600, timeout=1)
 
     def set_pin_in(self, pin):
-        self.debugger.out("#" + str(pin) + " set to IN")
+        self.debugger.out("#%d set to IN" % pin)
         GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     def set_pin_out(self, pin):
-        self.debugger.out("#" + str(pin) + " set to OUT")
+        self.debugger.out("#%d set to OUT" % pin)
         GPIO.setup(pin, GPIO.OUT)
         self.pin_off(pin)
 
     def read_pin(self, pin):
         result = (GPIO.input(pin) != 0)
-        self.debugger.out("#" + str(pin) + " reads " + str(result))
+        self.debugger.out("#%d reads %s" % (pin, result))
         return result
 
     def pin_on(self, pin, time):
-        self.debugger.out("Voltage on #" + str(pin) + " (" + str(time) + "s)")
+        self.debugger.out("Voltage on #%d (%d s)" % (pin, time))
         GPIO.output(pin, GPIO.HIGH)
         sleep(time)
         self.pin_off(pin)
 
     def pin_off(self, pin):
-        self.debugger.out("Voltage off #" + str(pin))
+        self.debugger.out("Voltage off #%d" % pin)
         GPIO.output(pin, GPIO.LOW)
 
     def ring(self, time):
@@ -49,7 +49,7 @@ class pi_hardware:
         return self.read_pin(self.hook_pin)
 
     def serial_write(self, message):
-        self.debugger.out("Serial out:\t" + message)
+        self.debugger.out("Serial out: '%s'" % message)
         self.serial_port.write(message + '\r\n')
 
     def serial_read(self):
@@ -65,7 +65,7 @@ class pi_hardware:
                 break
 
         full_message = full_message.replace('\r\n', ' ').replace('\n', ' ')
-        self.debugger.out("Serial in:\t" + full_message)
+        self.debugger.out("Serial in: '%s'" % full_message)
         return full_message
 
     def get_rotary(self):
