@@ -75,7 +75,8 @@ class pi_hardware:
 
     def get_rotary(self):
         number = ''
-        while len(number) < 10:
+        # TODO Can only call 10-digit numbers!
+        while len(number) < 10 and self.hook_lifted():
             self.debugger.wait(0.05)
             number = number + self.get_rotary_digit()
             self.debugger.out('Number=%s' % number)
