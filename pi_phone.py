@@ -13,6 +13,12 @@ class pi_phone:
         if not self.modem.check_status():
             self.power_on_modem()
         self.modem.caller_id()
+
+        if self.hardware.hook_lifted():
+            self.debugger.out('Waiting on hook.')
+            while self.hardware.hook_lifted():
+                self.debugger.wait(0.4)
+
         self.hardware.ring(0.5)
 
         while True:
@@ -42,7 +48,8 @@ class pi_phone:
 
     def make_call(self):
         number = self.hardware.get_rotary()
-        if not self.hardware.hook_lifted():
+        if number != '' and not self.hardware.hook_lifted():
+            self.debugger.out("No number or hook returned!")
             return
 
         if not self.modem.check_status():
