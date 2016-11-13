@@ -87,9 +87,6 @@ class pi_hardware:
                 no_digit_counter += 1
         return number
 
-        # self.debugger.wait(1.0)
-        # return '0738299658'
-
     def get_rotary_digit(self):
         flag = False
         counter = 0
