@@ -13,6 +13,7 @@ class pi_phone:
         if not self.modem.check_status():
             self.power_on_modem()
         self.modem.caller_id()
+        self.hardware.ring(0.5)
 
         while True:
             print('')
