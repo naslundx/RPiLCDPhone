@@ -47,7 +47,7 @@ class pi_hardware:
         self.pin_on(self.ringer_pin, time)
 
     def hook_lifted(self):
-        return self.read_pin(self.hook_pin)
+        return self.read_pin(self.hook_pin, write_to_debug=False)
 
     def serial_flush(self):
         bus = self.serial_read()
@@ -98,11 +98,11 @@ class pi_hardware:
                 false_flag_tick += 1
             else:
                 false_flag_tick = 0
-            if false_flag_tick > 100:
+            if false_flag_tick > 100 and counter > 0:
                 ctr = int(counter / 2) - 1
                 if ctr >= 0:
                     result = str(ctr)
                     return result
                 else:
                     break
-        return None
+        return ''
