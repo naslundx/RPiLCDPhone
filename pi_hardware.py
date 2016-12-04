@@ -62,8 +62,8 @@ class pi_hardware:
         iterations = 5
         while iterations > 0:
             iterations -= 1
-            self.debugger.wait(0.1)
-            message = self.serial_port.read(10)
+            self.debugger.wait(0.05)
+            message = self.serial_port.read(25)
             if message:
                 full_message = full_message + message
             else:
@@ -76,8 +76,8 @@ class pi_hardware:
     def get_rotary(self):
         no_digit_counter = 0
         number = ''
-        while self.hook_lifted() and no_digit_counter < 5:
-            self.debugger.wait(0.1)
+        while self.hook_lifted() and no_digit_counter < 20:
+            self.debugger.wait(0.05)
             next_digit = self.get_rotary_digit()
             if next_digit:
                 number = number + next_digit
